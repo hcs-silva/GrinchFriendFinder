@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grinch Friend Finder</title>
     <style>
         body {
-            background-color: green;            
+            background-color: green;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -27,31 +28,122 @@
 
         button {
             margin: 5px;
-        } 
+        }
 
         #result {
             background-color: red;
             margin-top: 20px;
-            height: 100px;  
-            border: 2px dashed white;   
-            color: black;            
+            height: 100px;
+            border: 2px dashed white;
+            color: black;
             font-size: large;
             font-weight: bold;
             display: flex;
-            align-items: center; /* Center vertically */
-            justify-content: center; /* Center horizontally */
+            align-items: center;
+            /* Center vertically */
+            justify-content: center;
+            /* Center horizontally */
         }
+
     </style>
 </head>
+
 <body>
     <div class="container">
         <label for="nameInput">Enter your name: </label>
         <input type="text" id="nameInput" required>
+        <br />
+        <label for="nameInput">Enter your code word: </label>
+        <input type="text" id="codeWordInput" required>
         <div id="buttons-container">
             <button onclick="submitForm()">Submit</button>
         </div>
         <div id="result"></div>
+        <img id="myImage" alt="Dynamic Image">
+        <!-- <img id="myImage" src="http://localhost:8080/images/bacalhuco_sixpack.jpeg"> -->
     </div>
-    <script src="./script.js"></script>
+    <script>
+        //Check if the input field is filled
+        function submitForm() {
+            const name = document.getElementById("nameInput").value;
+            const code_word = document.getElementById("codeWordInput").value;
+
+            if (name.trim() !== "" && code_word.trim() !== "") {
+                postName(name, code_word)
+            } else {
+                alert("Please fill both Text Holes.");
+            }
+        }
+
+        function getImageFile(name) {
+
+
+            fetch("http://localhost:8080/getImagefor/" + name, {
+                method: 'GET',
+                mode: 'cors',  // Enable CORS
+                headers: {
+                    'Content-Type': 'application/json'
+                    // Add any additional headers if needed
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // or response.text() if the response is not JSON
+            }).then(data => {
+                // Process the data from the successful response
+                console.log(data);
+                const image_url = data['image']
+
+                document.getElementById("myImage").src = ""
+                document.getElementById("myImage").src = image_url
+                setTimeout(() => {
+                    document.getElementById("myImage").src = image_url
+                }, 3000);
+            }).catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+
+        }
+
+        function postName(name, code_word) {
+            var url = 'http://localhost:8080/';
+
+            // Example data to be sent in the POST request
+            var postData = {
+                name: name,
+                code_word: code_word
+            };
+
+            fetch(url, {
+                method: 'POST',
+                mode: 'cors',  // Enable CORS
+                headers: {
+                    'Content-Type': 'application/json'
+                    // Add any additional headers if needed
+                },
+                body: JSON.stringify(postData)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // or response.text() if the response is not JSON
+            }).then(data => {
+                // Successful response
+                document.getElementById("result").innerHTML = data['grinch_response'].toUpperCase();
+
+                getImageFile(data['grinch_response'].replace("ç", "c"))
+                setTimeout(() => {
+                    document.getElementById("result").innerHTML = "";
+                    document.getElementById("codeWordInput").value = "";
+                }, 3000);
+            }).catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+
+
+    </script>
 </body>
+
 </html>
