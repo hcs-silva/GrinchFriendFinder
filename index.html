@@ -64,6 +64,8 @@
         <!-- <img id="myImage" src="http://localhost:8080/images/bacalhuco_sixpack.jpeg"> -->
     </div>
     <script>
+        //const hostname="http://localhost:8080"
+        const hostname="http://2.82.173.210:12345"
         //Check if the input field is filled
         function submitForm() {
             const name = document.getElementById("nameInput").value;
@@ -79,7 +81,7 @@
         function getImageFile(name) {
 
 
-            fetch("http://localhost:8080/getImagefor/" + name, {
+            fetch(hostname+"/getImagefor/" + name, {
                 method: 'GET',
                 mode: 'cors',  // Enable CORS
                 headers: {
@@ -116,7 +118,7 @@
                 code_word: code_word
             };
 
-            fetch(url, {
+            fetch(hostname, {
                 method: 'POST',
                 mode: 'cors',  // Enable CORS
                 headers: {
