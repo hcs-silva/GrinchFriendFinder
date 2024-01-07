@@ -84,7 +84,7 @@ class MyServer(BaseHTTPRequestHandler):
             image_file_path="./index.html"
             # If the file exists, send the image
             self.send_response(200)
-            self.send_header("Content-type", "image/jpeg")  # Adjust content type based on your image type
+            self.send_header("Content-type", "text/html")  # Adjust content type based on your image type
             self.end_headers()
 
             with open(image_file_path, "rb") as image_file:
@@ -97,7 +97,7 @@ class MyServer(BaseHTTPRequestHandler):
             if os.path.isfile(image_file_path):
                 # If the file exists, send the image
                 self.send_response(200)
-                self.send_header("Content-type", "text/html")  # Adjust content type based on your image type
+                self.send_header("Content-type", "image/jpeg")  # Adjust content type based on your image type
                 self.end_headers()
 
                 with open(image_file_path, "rb") as image_file:
