@@ -10,6 +10,7 @@ HOST = "localhost"
 # HOST="2.82.173.210"
 PORT = 8080
 HOSTNAME= "http://"+HOST+":"+str(PORT)
+IMAGE_HOSTNAME="http://2.82.173.210:12345"
 
 class MyServer(BaseHTTPRequestHandler):
 
@@ -71,7 +72,7 @@ class MyServer(BaseHTTPRequestHandler):
             image_choice = file_list[random.randint(0, len(file_list) - 1)]
 
             response_data = {
-                "image": HOSTNAME + "/images/"+image_choice
+                "image": IMAGE_HOSTNAME + "/images/"+image_choice
             }
 
             # Convert the dictionary to a JSON-formatted string
@@ -121,11 +122,7 @@ class MyServer(BaseHTTPRequestHandler):
         # print(json.loads(post_data)['name'])
         print(parsed_data)
         response_data = {
-            "method": "POST",
-            "grinch_response": grinch.iAm(parsed_data['name'], parsed_data['code_word']),
-            "message": "This is an example JSON response",
-            "data_received": parsed_data,
-            "path": self.path
+            "grinch_response": grinch.iAm(parsed_data['name'], parsed_data['code_word'])
         }
 
         # Convert the dictionary to a JSON-formatted string
