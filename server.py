@@ -80,16 +80,24 @@ class MyServer(BaseHTTPRequestHandler):
 
             # Send the JSON response as bytes
             self.wfile.write(bytes(json_response, "utf-8"))
+        elif self.path.startswith("/index.html"):
+            image_file_path="./index.html"
+            # If the file exists, send the image
+            self.send_response(200)
+            self.send_header("Content-type", "image/jpeg")  # Adjust content type based on your image type
+            self.end_headers()
+
+            with open(image_file_path, "rb") as image_file:
+                self.wfile.write(image_file.read())
         elif self.path.startswith("/images/"):
             # If the requested path starts with "/images/", serve images
-            file_list=self.get_filenames("bacalhuco")
             image_file_path="./images/"+self.path.replace("/images/", "").replace("ç", "c")
 
             print("Image file path: "+image_file_path)
             if os.path.isfile(image_file_path):
                 # If the file exists, send the image
                 self.send_response(200)
-                self.send_header("Content-type", "image/jpeg")  # Adjust content type based on your image type
+                self.send_header("Content-type", "text/html")  # Adjust content type based on your image type
                 self.end_headers()
 
                 with open(image_file_path, "rb") as image_file:
